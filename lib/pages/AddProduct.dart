@@ -34,7 +34,10 @@ class _AddtaskState extends State<Addtask> {
     });
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+      MaterialPageRoute(
+          builder: (context) => const HomePage(
+                product: [],
+              )),
     );
   }
 

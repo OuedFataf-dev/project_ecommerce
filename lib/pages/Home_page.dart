@@ -2,10 +2,13 @@ import 'package:e_commerce/pages/authentification/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'addtask.dart';
+import 'AddProduct.dart';
+import 'DetaillProduct.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final List<Product> product;
+  const HomePage({super.key, required this.product});
+  // Accepter une liste de Meals
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -130,12 +133,14 @@ class _HomePageState extends State<HomePage> {
                         doc['prix'] ?? '0€'; // S'assurer que c'est une chaîne
                     final description =
                         doc['description'] ?? 'Aucune description';
+                    // final quantity = doc['quantity'] ?? 'quantity';
 
-                    return TaskCard(
+                    return Product(
                       id: doc.id, // Passer l'ID du document ici
                       name: name,
                       prix: prix, // Le prix est une chaîne
                       description: description,
+                      //  quantity: quantity,
                     );
                   },
                 );
@@ -148,92 +153,103 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class TaskCard extends StatelessWidget {
+class Product extends StatelessWidget {
   final String id; // Ajout de l'ID du document
   final String name;
   final String prix;
   final String description;
+  // final int quantity;
 
-  const TaskCard({
+  const Product({
     required this.id,
     required this.name,
     required this.prix,
     required this.description,
+    // required this.quantity,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.blue.shade300, Colors.blue.shade100],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 3),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    DetaillProduct(ProductId: id, quantity: 1)));
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade300, Colors.blue.shade100],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 400),
-              child: GestureDetector(
-                onTap: () async {
-                  // Fonction de suppression
-                  await FirebaseFirestore.instance
-                      .collection('tasks')
-                      .doc(id)
-                      .delete();
-                },
-                child: Icon(Icons.delete),
-              ),
-            ),
-            Text(
-              name,
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(height: 10.0),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                prix, // Le prix est déjà une chaîne
-                style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(height: 15.0),
-            Text(
-              description,
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Colors.white.withOpacity(0.9),
-              ),
-              textAlign: TextAlign.center,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, 3),
             ),
           ],
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 400),
+                child: GestureDetector(
+                  onTap: () async {
+                    // Fonction de suppression
+                    await FirebaseFirestore.instance
+                        .collection('tasks')
+                        .doc(id)
+                        .delete();
+                  },
+                  child: Icon(Icons.delete),
+                ),
+              ),
+              Text(
+                name,
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 10.0),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  prix, // Le prix est déjà une chaîne
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 15.0),
+              Text(
+                description,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.white.withOpacity(0.9),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );

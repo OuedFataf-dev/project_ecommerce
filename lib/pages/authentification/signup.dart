@@ -48,7 +48,10 @@ class _SignUpState extends State<SignUp> {
         if (mounted) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(
+                builder: (context) => const HomePage(
+                      product: [],
+                    )),
           );
         }
       }

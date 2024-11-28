@@ -1,3 +1,4 @@
+import 'package:e_commerce/pages/DetaillProduct.dart';
 import 'package:e_commerce/pages/Home_page.dart';
 import 'package:flutter/material.dart';
 import './pages/authentification/login.dart';
@@ -5,8 +6,10 @@ import './pages/authentification/signup.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'Services/provider.dart';
+import 'package:provider/provider.dart';
 
-import './pages/addtask.dart';
+import 'pages/AddProduct.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,8 +22,16 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
-  runApp(const MyApp());
+  // Exécution de l'application avec le ChangeNotifierProvider
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => PanierProvider(),
+      child: MyApp(),
+    ),
+  );
 }
+
+//runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -31,8 +42,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/',
       routes: {
-        '/': (context) => SignUp(),
-        '/home': (context) => HomePage(),
+        '/': (context) => const HomePage(
+              product: [],
+            ),
+        '/home': (context) => const HomePage(
+              product: [],
+            ),
       },
     );
   }
