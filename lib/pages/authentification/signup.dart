@@ -116,7 +116,7 @@ class _SignUpState extends State<SignUp> {
                   child: CircleAvatar(
                     backgroundColor: Colors.transparent,
                     radius: 100.0,
-                    child: Image.asset('assets/images/google.png'),
+                    child: Image.asset('assets/images/about.png'),
                   ),
                 ),
                 const SizedBox(height: 20.0),
@@ -160,7 +160,7 @@ class _SignUpState extends State<SignUp> {
                       ),
                       prefixIcon: Icon(Icons.password),
                       hintText: 'password',
-                      label: Text('votre Mote de pass'),
+                      label: Text('votre Mot de pass'),
                       errorStyle: TextStyle(fontSize: 14, color: Colors.red),
                     ),
                     validator: (value) {

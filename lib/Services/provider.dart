@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-//import '../models/product.dart';
-import '../pages/models.dart';
-// Assurez-vous d'importer la classe Product
+import '../pages/models.dart'; // Assurez-vous d'importer le modèle Product
 
 class PanierProvider with ChangeNotifier {
   List<Product> _panier = [];
@@ -20,10 +17,10 @@ class PanierProvider with ChangeNotifier {
       final updatedProduct = Product(
         id: existingProduct.id,
         name: existingProduct.name,
+        imageUrl: existingProduct.imageUrl,
         prix: existingProduct.prix,
         description: existingProduct.description,
-        quantity: existingProduct.quantity +
-            product.quantity, // Directly add quantities as integers
+        quantity: existingProduct.quantity + product.quantity,
       );
       _panier[existingProductIndex] = updatedProduct;
     } else {

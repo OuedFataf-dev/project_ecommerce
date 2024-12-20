@@ -6,6 +6,7 @@ import '../Services/provider.dart';
 import 'models.dart'; // Import Product from models.dart
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'pannier.dart';
 
 class DetaillProduct extends StatefulWidget {
   final String ProductId;
@@ -69,11 +70,12 @@ class _DetaillProductState extends State<DetaillProduct> {
               Material(
                 child: InkWell(
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => PanierPage()));
                   },
                   child: const Padding(
                     padding: EdgeInsets.all(10),
-                    child: Icon(CupertinoIcons.chevron_back, size: 30),
+                    child: Icon(Icons.shopping_cart, size: 30),
                   ),
                 ),
               ),
@@ -103,11 +105,30 @@ class _DetaillProductState extends State<DetaillProduct> {
                           SizedBox(
                             child: Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 55),
-                                  child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15),
-                                      child: Text('SALUT')),
+                                Container(
+                                  //color: Colors.red,
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 55),
+
+                                  //left: 200, right: 100),
+                                  child: SingleChildScrollView(
+                                      child: Container(
+                                    // color: Colors.red,
+                                    height: 150,
+                                    width: 350,
+                                    decoration: BoxDecoration(
+                                      //color: Colors.green,
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                            productDetail!.imageUrl,
+                                          ), // Utilisation de l'image en arrière-plan
+                                          fit: BoxFit.cover
+
+                                          // Ajuste l'image pour couvrir le Container
+                                          ),
+                                      // borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  )),
                                 ),
                                 const SizedBox(width: 20),
                                 Expanded(
@@ -172,7 +193,7 @@ class _DetaillProductState extends State<DetaillProduct> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Prix: ${productDetail!.prix}',
+                                    productDetail!.prix.toString(),
                                     style: const TextStyle(fontSize: 18),
                                   ),
                                   Row(
@@ -211,17 +232,19 @@ class _DetaillProductState extends State<DetaillProduct> {
                                 onPressed: () {
                                   // Créer un nouveau produit à partir de celui récupéré
                                   Product nouveauProduct = Product(
-                                      id: productDetail!.id,
-                                      name: productDetail!.name,
-                                      prix: productDetail!.prix,
-                                      description: productDetail!.description,
-                                      quantity: productDetail!.quantity);
+                                    id: productDetail!.id,
+                                    name: productDetail!.name,
+                                    prix: productDetail!.prix,
+                                    imageUrl: productDetail!.imageUrl,
+                                    description: productDetail!.description,
+                                    quantity:
+                                        selectedQuantity, // Utiliser la quantité sélectionnée
+                                  );
 
                                   // Ajouter le produit au panier via le PanierProvider
-                                  final ProductPanier =
-                                      Provider.of<PanierProvider>(context,
-                                              listen: false)
-                                          .addProduct(nouveauProduct);
+                                  Provider.of<PanierProvider>(context,
+                                          listen: false)
+                                      .addProduct(nouveauProduct);
 
                                   // Affichage d'un Snackbar pour notifier l'utilisateur
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -233,7 +256,13 @@ class _DetaillProductState extends State<DetaillProduct> {
                                               2), // Durée d'affichage du message
                                     ),
                                   );
-                                  //print('Produit ajouté au panier: ${productDetail!.name}, Quantité: $selectedQuantity');
+
+                                  // Naviguer vers la page Panier après l'ajout
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PanierPage()),
+                                  );
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.orange,
@@ -244,7 +273,7 @@ class _DetaillProductState extends State<DetaillProduct> {
                                 ),
                               ),
                             ),
-                          ),
+                          )
                         ],
                       ],
                     ),

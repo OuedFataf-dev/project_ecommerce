@@ -129,7 +129,7 @@ class _RegisterState extends State<Register> {
                       child: CircleAvatar(
                         backgroundColor: Colors.transparent,
                         radius: 100.0,
-                        child: Image.asset('assets/images/google.png'),
+                        child: Image.asset('assets/images/about.png'),
                       ),
                     ),
                     Padding(
